@@ -5,7 +5,7 @@ package com.epam.brest.cource;
  */
 public class App {
     public static void main(String[] args) {
-        System.out.println("Hello World!");
+        System.out.print("Hello world");
 
         DBUtils dbUtils = new DBUtils();
 
