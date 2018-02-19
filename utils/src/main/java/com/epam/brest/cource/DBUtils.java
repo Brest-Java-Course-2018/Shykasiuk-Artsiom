@@ -29,7 +29,7 @@ public class DBUtils {
        }
     }
 
-    public void addUser(Connection connection, String login, String password, String description) throws SQLException {
+    public int addUser(Connection connection, String login, String password, String description) throws SQLException {
 
         System.out.println(String.format("User %s added!", login));
         String newUser = "INSERT INTO app_user (login, password, description) VALUES (?,?,?)";
@@ -37,7 +37,7 @@ public class DBUtils {
         preparedStatement.setString(1, login);
         preparedStatement.setString(2, password);
         preparedStatement.setString(3, description);
-        preparedStatement.executeUpdate();
+        return preparedStatement.executeUpdate();
 
     }
 
