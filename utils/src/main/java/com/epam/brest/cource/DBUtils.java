@@ -24,9 +24,9 @@ public class DBUtils {
                         "password VARCHAR(255) NOT NULL," +
                         "description VARCHAR(255) NULL," +
                         "PRIMARY KEY (user_id))";
-       try  (Statement statement = connection.createStatement()) {
-           statement.executeUpdate(createTable);
-       }
+        try (Statement statement = connection.createStatement()) {
+            statement.executeUpdate(createTable);
+        }
     }
 
     public int addUser(Connection connection, String login, String password, String description) throws SQLException {
