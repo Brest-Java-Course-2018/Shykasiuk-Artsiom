@@ -13,8 +13,7 @@
     <url>http://maven.apache.org</url>
 
     <modules>
-        <module>utils</module>
-        <module>mainapp</module>
+        <module>model</module>
     </modules>
 
     <distributionManagement>
