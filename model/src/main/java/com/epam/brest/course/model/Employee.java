@@ -1,4 +1,4 @@
-package com.epam.brest.cource;
+package com.epam.brest.course.model;
 
 
 /**

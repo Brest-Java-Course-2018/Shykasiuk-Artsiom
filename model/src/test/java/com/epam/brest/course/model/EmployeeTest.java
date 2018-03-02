@@ -1,9 +1,8 @@
-package com.epam.brest.cource;
+package com.epam.brest.course.model;
 
+import com.epam.brest.course.model.Employee;
 import org.junit.Assert;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 public class EmployeeTest {
 
