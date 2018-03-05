@@ -2,17 +2,28 @@ package com.epam.brest.course.model;
 
 
 /**
- * POJO Employee
+ * POJO Employee.
  */
-
 public class Employee {
 
+    /**
+     * Property Id.
+     */
     private Integer employeeId;
 
+    /**
+     * Property Name.
+     */
     private String employeeName;
 
+    /**
+     * Property Salary.
+     */
     private Integer salary;
 
+    /**
+     * Property Department id.
+     */
     private Integer departmentId;
 
     /**
@@ -24,42 +35,78 @@ public class Employee {
         return employeeId;
     }
 
-    public void setEmployeeId(Integer employeeId) {
+    /**
+     * Set Employee Id.
+     *
+     * @param employeeId new Id
+     */
+    public void setEmployeeId(final Integer employeeId) {
         this.employeeId = employeeId;
     }
 
+    /**
+     * Get Employee name.
+     *
+     * @return employeeName
+     */
     public String getEmployeeName() {
         return employeeName;
     }
 
-    public void setEmployeeName(String employeeName) {
+    /**
+     * Set employee name.
+     *
+     * @param employeeName new Name
+     */
+    public void setEmployeeName(final String employeeName) {
         this.employeeName = employeeName;
     }
 
+    /**
+     * Get employee's salary.
+     *
+     * @return salary
+     */
     public Integer getSalary() {
         return salary;
     }
 
-    public void setSalary(Integer salary) {
+    /**
+     * Set employee's salary.
+     *
+     * @param salary new salary
+     */
+    public void setSalary(final Integer salary) {
         this.salary = salary;
     }
 
+    /**
+     * Get employee's department.
+     *
+     * @return departmentId
+     */
     public Integer getDepartmentId() {
         return departmentId;
     }
 
-    public void setDepartmentId(Integer departmentId) {
+    /**
+     * Set department id.
+     *
+     *
+     * @param departmentId new department
+     */
+    public void setDepartmentId(final Integer departmentId) {
         this.departmentId = departmentId;
     }
 
 
     @Override
     public String toString() {
-        return "Employee{" +
-                "employeeId=" + employeeId +
-                ", employeeName='" + employeeName + '\'' +
-                ", salary=" + salary +
-                ", departmentId=" + departmentId +
-                '}';
+        return "Employee{"
+                + "employeeId=" + employeeId
+                + ", employeeName='" + employeeName + '\''
+                + ", salary=" + salary
+                + ", departmentId=" + departmentId
+                + '}';
     }
 }

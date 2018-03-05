@@ -87,7 +87,7 @@ public class Department {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) {
             return true;
         }
@@ -95,9 +95,9 @@ public class Department {
             return false;
         }
         Department that = (Department) o;
-        return Objects.equals(departmentId, that.departmentId) &&
-                Objects.equals(departmentName, that.departmentName) &&
-                Objects.equals(description, that.description);
+        return Objects.equals(departmentId, that.departmentId)
+                && Objects.equals(departmentName, that.departmentName)
+                && Objects.equals(description, that.description);
     }
 
     @Override
