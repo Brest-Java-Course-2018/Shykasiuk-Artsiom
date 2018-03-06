@@ -26,6 +26,16 @@ public class Employee {
      */
     private Integer departmentId;
 
+    public Employee() {
+    }
+
+    public Employee(String employeeName, Integer salary, Integer departmentId) {
+        this.employeeName = employeeName;
+        this.salary = salary;
+        this.departmentId = departmentId;
+    }
+
+
     /**
      * Get Employee Id.
      *
