@@ -98,11 +98,9 @@ public class DepartmentDaoImpl implements DepartmentDao {
                 namedParameterJdbcTemplate.queryForObject(departmentCheck, namedParameters, Integer.class);
 
         if (result == 0) {
-            namedParameters = new MapSqlParameterSource();
-            namedParameters.addValue("departmentName", department.getDepartmentName());
-            namedParameters.addValue(DESCRIPTION, department.getDescription());
+            SqlParameterSource namedParameter = new BeanPropertySqlParameterSource(department);
             KeyHolder generatedKeyHolder = new GeneratedKeyHolder();
-            namedParameterJdbcTemplate.update(departmentInsert, namedParameters, generatedKeyHolder);
+            namedParameterJdbcTemplate.update(departmentInsert, namedParameter, generatedKeyHolder);
             department.setDepartmentId(generatedKeyHolder.getKey().intValue());
         } else {
             throw new IllegalArgumentException("Department with the same name already exists");

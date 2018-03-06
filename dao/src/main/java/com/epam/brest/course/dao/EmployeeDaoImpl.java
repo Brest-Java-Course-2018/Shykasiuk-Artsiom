@@ -36,9 +36,6 @@ public class EmployeeDaoImpl implements EmployeeDao {
 
     @Value("${employee.delete}")
     private String employeeDelete;
-
-    @Value("${employee.check}")
-    private String employeeCheck;
     /**
      * Class NamedParameterJdbcTemplate from spring JDBC.
      */
@@ -76,22 +73,11 @@ public class EmployeeDaoImpl implements EmployeeDao {
 
     @Override
     public Employee addEmployee(Employee employee) {
-        MapSqlParameterSource namedParameters =
-                new MapSqlParameterSource(EMPLOYEE_NAME, employee.getEmployeeName());
-        Integer result =  namedParameterJdbcTemplate.queryForObject(employeeCheck, namedParameters, Integer.class);
 
-        if (result == 0) {
-            namedParameters = new MapSqlParameterSource();
-            namedParameters.addValue(EMPLOYEE_NAME, employee.getEmployeeName());
-            namedParameters.addValue(SALARY, employee.getSalary());
-            namedParameters.addValue(DEPARTMENT_ID, employee.getDepartmentId());
-            KeyHolder generatedKeyHolder = new GeneratedKeyHolder();
-            namedParameterJdbcTemplate.update(employeeInsert, namedParameters, generatedKeyHolder);
-            employee.setEmployeeId(generatedKeyHolder.getKey().intValue());
-        } else {
-            throw new IllegalArgumentException("Employee with the same name already exists");
-        }
-
+        SqlParameterSource namedParameters = new BeanPropertySqlParameterSource(employee);
+        KeyHolder generatedKeyHolder = new GeneratedKeyHolder();
+        namedParameterJdbcTemplate.update(employeeInsert, namedParameters, generatedKeyHolder);
+        employee.setEmployeeId(generatedKeyHolder.getKey().intValue());
         return employee;
     }
 
