@@ -46,7 +46,7 @@ public class DepartmentDaoImplTest {
         List<Department> departments = departmentDao.getDepartments();
         int sizeBefore = departments.size();
         Department department =
-                new Department("Education and training", "Department Education and training");
+                new Department("Educationq and training", "Department Education and training");
         Department newdepartment = departmentDao.addDepartment(department);
         Assert.assertNotNull(newdepartment.getDepartmentId());
         Assert.assertTrue(newdepartment.getDepartmentName().equals(department.getDepartmentName()));

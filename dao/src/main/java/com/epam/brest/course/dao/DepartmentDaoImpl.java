@@ -1,10 +1,10 @@
 package com.epam.brest.course.dao;
 
 import com.epam.brest.course.model.Department;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -13,7 +13,6 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 
-import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -22,6 +21,8 @@ import java.util.List;
  * CRUD for Department.
  */
 public class DepartmentDaoImpl implements DepartmentDao {
+
+    private static final Logger LOGGER = LogManager.getLogger();
 
     public static final String DEPARTMENT_ID = "departmentId";
     public static final String DEPARTMENT_NAME = "departmentName";
@@ -49,12 +50,13 @@ public class DepartmentDaoImpl implements DepartmentDao {
      */
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-    public void setNamedParameterJdbcTemplate(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
+    public DepartmentDaoImpl(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
     }
 
     @Override
     public List<Department> getDepartments() {
+        LOGGER.debug("getDepartments()");
         List<Department> departments =
                 namedParameterJdbcTemplate.getJdbcOperations().query(departmentSelect,
                         new DepartmentRowMapper());
@@ -62,22 +64,23 @@ public class DepartmentDaoImpl implements DepartmentDao {
 
     }
 
-/*    @Override
+    /*    @Override
+        public Department getDepartmentById(final Integer departmentId) {
+            SqlParameterSource namedParametrs =
+                    new MapSqlParameterSource(DEPARTMENT_ID, departmentId);
+            try {
+                Department department = namedParameterJdbcTemplate.queryForObject(
+                        departmentSelectById,
+                        namedParametrs,
+                        new DepartmentRowMapper());
+                return department;
+            } catch (EmptyResultDataAccessException e) {
+                return null;
+            }
+        }*/
+    @Override
     public Department getDepartmentById(final Integer departmentId) {
-        SqlParameterSource namedParametrs =
-                new MapSqlParameterSource(DEPARTMENT_ID, departmentId);
-        try {
-            Department department = namedParameterJdbcTemplate.queryForObject(
-                    departmentSelectById,
-                    namedParametrs,
-                    new DepartmentRowMapper());
-            return department;
-        } catch (EmptyResultDataAccessException e) {
-            return null;
-        }
-    }*/
-@Override
-    public Department getDepartmentById(final Integer departmentId) {
+        LOGGER.debug("getDepartmentById({})",departmentId);
         SqlParameterSource namedParameters =
                 new MapSqlParameterSource(DEPARTMENT_ID, departmentId);
         Department department =
@@ -90,17 +93,22 @@ public class DepartmentDaoImpl implements DepartmentDao {
 
     @Override
     public Department addDepartment(final Department department) {
-
+        LOGGER.debug("addDepartment({})",department);
         MapSqlParameterSource namedParameters =
-                new MapSqlParameterSource("departmentName", department.getDepartmentName());
+                new MapSqlParameterSource("departmentName",
+                        department.getDepartmentName());
 
         Integer result =
-                namedParameterJdbcTemplate.queryForObject(departmentCheck, namedParameters, Integer.class);
-
+                namedParameterJdbcTemplate.queryForObject(departmentCheck,
+                        namedParameters, Integer.class);
+        LOGGER.debug("result({})",result);
         if (result == 0) {
-            SqlParameterSource namedParameter = new BeanPropertySqlParameterSource(department);
+
+            SqlParameterSource namedParameter =
+                    new BeanPropertySqlParameterSource(department);
             KeyHolder generatedKeyHolder = new GeneratedKeyHolder();
-            namedParameterJdbcTemplate.update(departmentInsert, namedParameter, generatedKeyHolder);
+            namedParameterJdbcTemplate.update(departmentInsert,
+                    namedParameter, generatedKeyHolder);
             department.setDepartmentId(generatedKeyHolder.getKey().intValue());
         } else {
             throw new IllegalArgumentException("Department with the same name already exists");
