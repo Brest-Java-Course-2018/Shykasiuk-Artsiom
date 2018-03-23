@@ -34,16 +34,6 @@ public class EmployeeDaoImplTest {
     }
 
     @Test
-    public void getEmployeesByDepartmentId() throws Exception {
-        Employee employee1 = new Employee(VASIA, SALARY_1000, 1);
-        employeeDao.addEmployee(employee1);
-        Employee employee2 = new Employee(PETIA, SALARY_2000, 1);
-        employeeDao.addEmployee(employee2);
-        List<Employee> employees = employeeDao.getEmployeesByDepartment(1);
-        Assert.assertNotNull(employeeDao);
-    }
-
-    @Test
     public void getEmployeeById() throws Exception {
         Employee employee = new Employee(VASIA, SALARY_1000, 1);
         employee = employeeDao.addEmployee(employee);

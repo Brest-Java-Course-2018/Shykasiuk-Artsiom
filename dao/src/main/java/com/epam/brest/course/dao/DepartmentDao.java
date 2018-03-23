@@ -1,8 +1,10 @@
 package com.epam.brest.course.dao;
 
+import com.epam.brest.course.model.dto.DepartmentDTO;
+import com.epam.brest.course.model.dto.ShortDepartmentDTO;
 import com.epam.brest.course.model.Department;
 
-import java.util.List;
+import java.util.Collection;
 
 /**
  * Departmen DAO Interface.
@@ -12,9 +14,23 @@ public interface DepartmentDao {
     /**
      * Get list of departments.
      *
-     * @return List of objects Department
+     * @return List of objects Department.
      */
-    List<Department> getDepartments();
+    Collection<Department> getDepartments();
+
+    /**
+     * Get list of departments.
+     *
+     * @return Short list of objects Department.
+     */
+    Collection<ShortDepartmentDTO> getShortDepartmentsDTO();
+
+    /**
+     * Get list of departments.
+     *
+     * @return List of objects Department.
+     */
+    Collection<DepartmentDTO> getDepartmentsDTO();
 
     /**
      * Get department.

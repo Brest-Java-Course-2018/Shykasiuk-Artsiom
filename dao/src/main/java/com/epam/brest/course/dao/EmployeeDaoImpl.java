@@ -1,6 +1,8 @@
 package com.epam.brest.course.dao;
 
 import com.epam.brest.course.model.Employee;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
@@ -12,87 +14,142 @@ import org.springframework.jdbc.support.KeyHolder;
 
 import java.util.List;
 
+/**
+ * CRUD for Employee.
+ */
 public class EmployeeDaoImpl implements EmployeeDao {
 
+    /**
+     * Constant variable for logs.
+     */
+    private static final Logger LOGGER = LogManager.getLogger();
+
+    /**
+     * Constant variable.
+     */
     public static final String EMPLOYEE_ID = "employeeId";
+    /**
+     * Constant variable.
+     */
     public static final String EMPLOYEE_NAME = "employeeName";
-    public static final String SALARY = "salary";
-    public static final String DEPARTMENT_ID = "departmentId";
+    /**
+     * Constant variable.
+     */
+    public static final String EMPLOYEE_SALARY = "salary";
+    /**
+     * Constant variable.
+     */
+    public static final String EMPLOYEE_MAIL = "mail";
+    /**
+     * Constant variable.
+     */
+    public static final String EMPLOYEE_DEPT_ID = "deptId";
 
+    /**
+     * Query for select.
+     */
     @Value("${employee.select}")
-    private String employeeSelect;
-
+    private String select;
+    /**
+     * Query for select by department.
+     */
+    @Value("${employee.selectByDepartmentId}")
+    private String selectByDepartmentId;
+    /**
+     * Query for select by id.
+     */
     @Value("${employee.selectById}")
-    private String employeeSelectById;
-
-    @Value("${employee.selectByDep}")
-    private String employeeSelectByDepartment;
-
+    private String selectById;
+    /**
+     * Query for inserting.
+     */
     @Value("${employee.insert}")
-    private String employeeInsert;
-
+    private String insert;
+    /**
+     * Query for updating.
+     */
     @Value("${employee.update}")
-    private String employeeUpdate;
-
+    private String update;
+    /**
+     * Query for deleting.
+     */
     @Value("${employee.delete}")
-    private String employeeDelete;
+    private String delete;
+
     /**
      * Class NamedParameterJdbcTemplate from spring JDBC.
      */
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-    public EmployeeDaoImpl(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
+    /**
+     * Constructor.
+     *
+     * @param namedParameterJdbcTemplate new namedParameterJdbcTemplate.
+     */
+    public EmployeeDaoImpl(
+            final NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
     }
 
     @Override
     public List<Employee> getEmployees() {
-        List<Employee> employees =
-                namedParameterJdbcTemplate.getJdbcOperations().query(employeeSelect,
+        LOGGER.debug("getEmployees()");
+        List<Employee> employees = namedParameterJdbcTemplate
+                .getJdbcOperations().query(select,
                         BeanPropertyRowMapper.newInstance(Employee.class));
         return employees;
     }
 
     @Override
-    public Employee getEmployeeById(Integer employeeId) {
-        SqlParameterSource namedParameters = new MapSqlParameterSource(EMPLOYEE_ID, employeeId);
-        Employee employee =
-                namedParameterJdbcTemplate.queryForObject(employeeSelectById, namedParameters,
+    public List<Employee> getEmployeeByDepartmentId(
+            final Integer departmentId) {
+        LOGGER.debug("getEmployeeByDepartmentId({})", departmentId);
+        List<Employee> employees =
+                namedParameterJdbcTemplate.getJdbcOperations().query(
+                        selectByDepartmentId, new Object[]{departmentId},
                         BeanPropertyRowMapper.newInstance(Employee.class));
+        return employees;
+    }
+
+    @Override
+    public Employee getEmployeeById(final Integer employeeId) {
+        LOGGER.debug("getEmployeeById({})", employeeId);
+        SqlParameterSource namedParametrs =
+                new MapSqlParameterSource(EMPLOYEE_ID, employeeId);
+        Employee employee = namedParameterJdbcTemplate.queryForObject(
+                selectById, namedParametrs,
+                BeanPropertyRowMapper.newInstance(Employee.class));
+
         return employee;
     }
 
     @Override
-    public List<Employee> getEmployeesByDepartment(Integer departmentId) {
-        SqlParameterSource namedParameters = new MapSqlParameterSource(DEPARTMENT_ID, departmentId);
-        List<Employee> employees =
-                namedParameterJdbcTemplate.query(employeeSelectByDepartment, namedParameters,
-                        BeanPropertyRowMapper.newInstance(Employee.class));
-        return employees;
-    }
+    public Employee addEmployee(final Employee employee) {
+        LOGGER.debug("addEmployee({})", employee);
+        SqlParameterSource namedParameters =
+                new BeanPropertySqlParameterSource(employee);
 
-    @Override
-    public Employee addEmployee(Employee employee) {
-
-        SqlParameterSource namedParameters = new BeanPropertySqlParameterSource(employee);
         KeyHolder generatedKeyHolder = new GeneratedKeyHolder();
-        namedParameterJdbcTemplate.update(employeeInsert, namedParameters, generatedKeyHolder);
+
+        namedParameterJdbcTemplate.update(
+                insert, namedParameters, generatedKeyHolder);
         employee.setEmployeeId(generatedKeyHolder.getKey().intValue());
+
         return employee;
     }
 
     @Override
-    public void updateEmployee(Employee employee) {
-        SqlParameterSource namedParameter = new BeanPropertySqlParameterSource(employee);
-        namedParameterJdbcTemplate.update(
-                employeeUpdate,
-                namedParameter);
+    public void updateEmployee(final Employee employee) {
+        LOGGER.debug("updateEmployee({})", employee);
+        SqlParameterSource namedParameter =
+                new BeanPropertySqlParameterSource(employee);
+        namedParameterJdbcTemplate.update(update, namedParameter);
     }
 
     @Override
-    public void deleteEmployeeById(Integer employeeId) {
+    public void deleteEmployeeById(final Integer employeeId) {
+        LOGGER.debug("deleteEmployeeById({})", employeeId);
         namedParameterJdbcTemplate.getJdbcOperations().update(
-                employeeDelete, employeeId);
-
+                delete, employeeId);
     }
 }

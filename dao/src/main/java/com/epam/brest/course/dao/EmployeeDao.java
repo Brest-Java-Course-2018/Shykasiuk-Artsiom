@@ -1,6 +1,5 @@
 package com.epam.brest.course.dao;
 
-
 import com.epam.brest.course.model.Employee;
 
 import java.util.List;
@@ -8,16 +7,22 @@ import java.util.List;
 /**
  * Employee DAO Interface.
  */
-
 public interface EmployeeDao {
-
 
     /**
      * Get list of employees.
      *
-     * @return List of objects Employee
+     * @return List of objects Employee.
      */
     List<Employee> getEmployees();
+
+    /**
+     * Get employee by department.
+     *
+     * @param departmentId department number.
+     * @return Employee.
+     */
+    List<Employee> getEmployeeByDepartmentId(Integer departmentId);
 
     /**
      * Get employee.
@@ -26,14 +31,6 @@ public interface EmployeeDao {
      * @return Employee.
      */
     Employee getEmployeeById(Integer employeeId);
-
-    /**
-     * Get employees in department.
-     *
-     * @param departmentId department number
-     * @return
-     */
-    List<Employee> getEmployeesByDepartment(Integer departmentId);
 
     /**
      * Add new employee.
@@ -53,8 +50,9 @@ public interface EmployeeDao {
     /**
      * Delete employee.
      *
-     * @param id which employee to remove.
+     * @param id what employee to remove.
      */
     void deleteEmployeeById(Integer id);
+
 
 }
